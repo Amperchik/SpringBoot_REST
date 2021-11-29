@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Пользователи</title>
+</head>
+<body>
+<div th:align="center">
+    <h1>Администратор</h1>
+    <br/>
+    <br/>
+    <h2>Пользователи</h2>
+    <h3><a th:href="@{/admin/create}">Добавить</a></h3>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>LAST_NAME</th>
+            <th>PASSWORD</th>
+            <th>EMAIL</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}">ID</td>
+            <td th:text="${user.firstName}">NAME</td>
+            <td th:text="${user.lastName}">LAST_NAME</td>
+            <td th:text="${user.password}">PASSWORD</td>
+            <td th:text="${user.email}">EMAIL</td>
+            <td th:text="${user.getAuthorities()}"></td>
+            <td><a th:href="@{/admin/update?id={id} (id=${user.getId()})}">Изменить</a></td>
+            <td><a th:href="@{/admin/delete?id={id} (id=${user.getId()})}">Удалить</a></td>
+        </tr>
+    </table>
+    <br/>
+    <br/>
+    <a th:href="@{/logout}">Выйти</a>
+</div>
+</body>
+</html>
