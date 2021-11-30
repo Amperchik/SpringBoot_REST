@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-@ComponentScan({"test.test.service", "test.test.dao", "test.test.model", "test.test.controller","test.test.security"})
+@ComponentScan({"boot.service", "boot.dao", "boot.model", "boot.controller","boot.security"})
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
    private final UserDetailsService userDetailsService;
    private final SuccessUserHandler successUserHandler;
