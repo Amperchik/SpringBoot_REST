@@ -3,6 +3,7 @@ package boot.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import boot.model.User;
@@ -23,8 +24,9 @@ public class UsersController {
      * Аннотация указывает приложению что это get запрос HTTP
      */
     @GetMapping(value = "/admin")
-    public String index(Model model) {
+    public String index(Model model, Principal principal) {
         model.addAttribute("users", userService.getUsers());
+        model.addAttribute("user", userService.findByEmail(principal.getName()));
         return "index";
     }
 
@@ -33,43 +35,48 @@ public class UsersController {
      * Параемтр переданный в строке URL извлекается с помощью аннотации @PathVariable
      * и присваивается переменной id.
      */
-    @GetMapping("/admin/create")
-    public String createForm(User user, Model model) {
-        model.addAttribute(user);
-        return "create";
-    }
+//   @GetMapping("/admin/create")
+//    public String createForm(User user, Model model) {
+//        model.addAttribute(user);
+//        return "create";
+//    }
 
     @PostMapping("/admin/create")
-    public String create(User user, String[] role) {
+    public String create(@ModelAttribute User user,@RequestParam("checkBoxRoles") String[] role) {
         user.setRoles(role);
         userService.addUser(user);
         return "redirect:/admin";
     }
 
-    @GetMapping("/admin/delete")
+    @PostMapping("/admin/delete")
     public String deleteById(@RequestParam long id) {
         userService.deleteById(id);
         return "redirect:/admin";
     }
 
-    @GetMapping("/admin/update")
-    public String updateUserForm(@RequestParam long id, Model model) {
-        User user = userService.getUserId(id);
-        model.addAttribute("user", user);
-        model.addAttribute("roles", user.getRoles());
-        return "update";
-    }
+//    @GetMapping("/admin/update")
+//    public String updateUserForm(@RequestParam long id, Model model) {
+//        User user = userService.getUserId(id);
+//        model.addAttribute("user", user);
+//        model.addAttribute("roles", user.getRoles());
+//        return "update";
+//    }
 
     @PostMapping("/admin/update")
-    public String updateUser(User user, String[] role) {
+    public String updateUser(User user,@RequestParam("checkBoxRoles") String[] role) {
         user.setRoles(role);
         userService.updateUser(user);
         return "redirect:/admin";
     }
-
     @GetMapping("/user")
     public String test(Model model, Principal user) {
-        model.addAttribute("user", userService.findByLastName(user.getName()));
+        model.addAttribute("user", userService.findByEmail(user.getName()));
         return "/user";
     }
+    @GetMapping(value = "/login")
+    public String login() {
+        return "login";
+    }
 }
+
+

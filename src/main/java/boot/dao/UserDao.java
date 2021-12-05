@@ -7,7 +7,7 @@ import boot.model.User;
 import java.util.List;
 
 public interface UserDao {
-    User getByUserName(String username);
+    User getByUserEmail(String email);
 
     void create(User a);
 
