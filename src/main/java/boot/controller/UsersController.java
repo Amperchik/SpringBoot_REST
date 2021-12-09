@@ -1,5 +1,6 @@
 package boot.controller;
 
+import boot.model.Role;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +44,11 @@ public class UsersController {
 
     @PostMapping("/admin/create")
     public String create(@ModelAttribute User user,@RequestParam("checkBoxRoles") String[] role) {
-        user.setRoles(role);
+        Role[] roles= new Role[role.length];
+        for(int i=0;i<roles.length;i++){
+            roles[0]=new Role(role[i]);
+        }
+        user.setRoles(roles);
         userService.addUser(user);
         return "redirect:/admin";
     }
@@ -64,7 +69,11 @@ public class UsersController {
 
     @PostMapping("/admin/update")
     public String updateUser(User user,@RequestParam("checkBoxRoles") String[] role) {
-        user.setRoles(role);
+        Role[] roles= new Role[role.length];
+        for(int i=0;i<roles.length;i++){
+            roles[0]=new Role(role[i]);
+        }
+        user.setRoles(roles);
         userService.updateUser(user);
         return "redirect:/admin";
     }

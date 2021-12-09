@@ -54,20 +54,27 @@ public class User implements UserDetails {
         this.email = email;
         this.roles = roles;
     }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRoles(Role[]roles1) {
+        if (roles == null) roles = new HashSet<>();
+        for (Role role : roles1) {
+            roles.add(role);
+        }
     }
+
+//    public void setRoles(Set<Role> roles) {
+//        this.roles = roles;
+//    }
 
     public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(String[] role) {
-        if (roles == null) roles = new HashSet<>();
-        for (String a : role)
-            roles.add(new Role(a));
-    }
+//    public void setRoles(String[] role) {
+//        if (roles == null) roles = new HashSet<>();
+//        for (String a : role)
+//            roles.add(new Role(a));
+//    }
+
 
     public Long getId() {
         return id;
