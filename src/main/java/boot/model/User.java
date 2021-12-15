@@ -1,8 +1,10 @@
 package boot.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -20,7 +22,7 @@ public class User implements UserDetails {
     private String lastName;
     @Column
     private String password;
-    @ManyToMany(cascade=CascadeType.ALL , fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -54,9 +56,11 @@ public class User implements UserDetails {
         this.email = email;
         this.roles = roles;
     }
-    public void setRoles(Role[]roles1) {
+
+    public void setRoles(Role[] roles1) {
         if (roles == null) roles = new HashSet<>();
         for (Role role : roles1) {
+            role.setId((role.getRole().equals("ROLE_ADMIN")) ? 1l : 2l);
             roles.add(role);
         }
     }
@@ -109,6 +113,7 @@ public class User implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities;
         authorities = new ArrayList<>();
@@ -129,21 +134,25 @@ public class User implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }

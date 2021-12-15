@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("rest")
 public class RESTController {
@@ -43,7 +43,9 @@ public class RESTController {
 
     @DeleteMapping("/users/{id}")
     ResponseEntity<User> deleteUser(@PathVariable long id) {
+        User d=new User();
+        d.setId(id);
         userService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(d,HttpStatus.OK);
     }
 }

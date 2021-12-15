@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
@@ -65,140 +64,122 @@
                             <th scope="col">Удалить</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr th:each="user : ${users}">
-                            <td th:text="${user.id}">ID</td>
-                            <td th:text="${user.firstName}">Имя</td>
-                            <td th:text="${user.lastName}">Фамилия</td>
-                            <td th:text="${user.email}">EMAIL</td>
-                            <td th:text="${user.roles}">Право доступа</td>
-                            <td>
-                                <button class="btn btn-info edit-btn"
-                                        data-toggle="modal"
-                                        th:data-target="${'#edit' + user.id}">Редактировать
-                                </button>
-                            </td>
-                            <td>
-                                <button class="btn btn-danger"
-                                        data-toggle="modal"
-                                        th:data-target="${'#delete' + user.id}">Удалить
-                                </button>
-                            </td>
-                            <!--Заполнение модального окна Редактирования-->
-                            <div class="modal fade" th:id="${'edit' + user.id}" aria-hidden="true"
-                                 role="dialog" th:aria-labelledby="${'edit' + user.id}">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Редактировать</h5>
-                                            <button type="button" class="close" data-dismiss="modal">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div style="text-align: center;">
-                                                <div class="row justify-content-center align-items-center">
-                                                    <form class="text-center" th:action="@{/admin/update}"
-                                                          th:object="${user}"
-                                                          method="post" th:id="${'editForm' + user.id}">
-                                                        <div class="form-group font-weight-bold">
-                                                            <label for="id">ID</label>
-                                                            <input type="number" class="form-control" id="id"
-                                                                   name="id" th:value="${user.id}" readonly>
-                                                            <label for="editName">Имя</label>
-                                                            <input type="text" class="form-control" id="editName"
-                                                                   name="firstName" th:value="${user.firstName}">
-                                                            <label for="editLastName">Фамилия</label>
-                                                            <input type="text" class="form-control" id="editLastName"
-                                                                   name="lastName" th:value="${user.lastName}">
-                                                            <label for="editEmail">Email</label>
-                                                            <input type="email" class="form-control" id="editEmail"
-                                                                   name="email" th:value="${user.email}">
-                                                            <label for="editPassword">Пароль</label>
-                                                            <input type="password" class="form-control"
-                                                                   id="editPassword"
-                                                                   name="password" th:value="${user.password}">
+                        <tbody id="allUsers">
 
-                                                            <label for="editRole">Право доступа</label>
-                                                            <select class="form-select w-100" size="2" id="editRole"
-                                                                    name="checkBoxRoles">
-                                                                <option value="ROLE_ADMIN">Админ</option>
-                                                                <option value="ROLE_USER">Пользователь</option>
-                                                            </select>
-                                                        </div>
-                                                    </form>
-                                                </div>
+                        <!--Заполнение модального окна Редактирования-->
+
+                        <div class="modal" id="editUser" aria-hidden="true"
+                             role="dialog" aria-labelledby="editModalLabel">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Редактировать</h5>
+                                        <button type="button" class="close" data-dismiss="modal">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div style="text-align: center;">
+                                            <div class="row justify-content-center align-items-center">
+                                                <form class="text-center" id="editUserForm">
+                                                    <div class="form-group font-weight-bold">
+                                                        <label for="editId">ID</label>
+                                                        <input type="number" class="form-control" id="editId"
+                                                               name="id" readonly>
+                                                        <label for="editName">Имя</label>
+                                                        <input type="text" class="form-control" id="editName"
+                                                               name="firstName">
+                                                        <label for="editLastName">Фамилия</label>
+                                                        <input type="text" class="form-control" id="editLastName"
+                                                               name="lastName">
+                                                        <label for="editEmail">Email</label>
+                                                        <input type="email" class="form-control" id="editEmail"
+                                                               name="email">
+                                                        <label for="editPassword">Пароль</label>
+                                                        <input type="password" class="form-control"
+                                                               id="editPassword"
+                                                               name="password">
+
+                                                        <label for="editRole">Право доступа</label>
+                                                        <select multiple class="form-select w-100" size="2"
+                                                                id="editRole"
+                                                                name="checkBoxRoles">
+                                                            <option value="ROLE_ADMIN">Админ</option>
+                                                            <option value="ROLE_USER">Пользователь</option>
+                                                        </select>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                    data-dismiss="modal">Close
-                                            </button>
-                                            <button type="submit" th:form="${'editForm' + user.id}"
-                                                    class="btn btn-primary">Обновить
-                                            </button>
-                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" id="closeEditModal"
+                                                data-dismiss="modal">Close
+                                        </button>
+                                        <button type="submit" id="editButton"
+                                                class="btn btn-primary">Обновить
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                            <!--Заполнение модального окна Удаления user-->
-                            <div class="modal fade" th:id="${'delete' + user.id}" aria-hidden="true"
-                                 role="dialog" th:aria-labelledby="${'delete' + user.id}">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Удалить</h5>
-                                            <button type="button" class="close" data-dismiss="modal">
-                                                &times;
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div style="text-align: center;">
-                                                <div class="row justify-content-center align-items-center">
-                                                    <form class="text-center" th:action="@{/admin/delete?id={id} (id=${user.getId()})}"
-                                                          th:object="${user}" method="post"
-                                                          th:id="${'deleteForm' + user.id}">
-                                                        <div class="form-group font-weight-bold">
-                                                            <label for="delId">ID</label>
-                                                            <input type="number" class="form-control" id="delId"
-                                                                   name="id" th:value="${user.id}" readonly>
-                                                            <label for="delName">Имя</label>
-                                                            <input type="text" class="form-control" id="delName"
-                                                                   name="firstName" th:value="${user.firstName}" readonly>
-                                                            <label for="delLastName">Фамилия</label>
-                                                            <input type="text" class="form-control" id="delLastName"
-                                                                   name="lastName" th:value="${user.lastName}" readonly>
-                                                            <label for="delEmail">Email</label>
-                                                            <input type="email" class="form-control" id="delEmail"
-                                                                   name="email" th:value="${user.email}" readonly>
-                                                            <label for="delPassword">Пароль</label>
-                                                            <input type="password" class="form-control"
-                                                                   id="delPassword"
-                                                                   name="password" th:value="${user.password}" readonly>
+                        </div>
+                        <!--Заполнение модального окна Удаления user-->
+                        <div class="modal fade" id="deleteUser" aria-hidden="true"
+                             role="dialog" aria-labelledby="deleteModalLabel">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Удалить</h5>
+                                        <button type="button" class="close" data-dismiss="modal">
+                                            &times;
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div style="text-align: center;">
+                                            <div class="row justify-content-center align-items-center">
+                                                <form class="text-center" method="post" id="deleteUserForm">
+                                                    <div class="form-group font-weight-bold">
+                                                        <label for="delId">ID</label>
+                                                        <input type="number" class="form-control" id="delId"
+                                                               name="id" readonly>
+                                                        <label for="delName">Имя</label>
+                                                        <input type="text" class="form-control" id="delName"
+                                                               name="firstName" readonly>
+                                                        <label for="delLastName">Фамилия</label>
+                                                        <input type="text" class="form-control" id="delLastName"
+                                                               name="lastName" readonly>
+                                                        <label for="delEmail">Email</label>
+                                                        <input type="email" class="form-control" id="delEmail"
+                                                               name="email" readonly>
+                                                        <label for="delPassword">Пароль</label>
+                                                        <input type="password" class="form-control"
+                                                               id="delPassword"
+                                                               name="password" readonly>
 
-                                                            <label for="delRole">Право доступа</label>
-                                                            <select class="form-select w-100" size="2" id="delRole"
-                                                                    name="checkBoxRoles">
-                                                                <option value="ROLE_ADMIN">Админ</option>
-                                                                <option value="ROLE_USER">Пользователь</option>
-                                                            </select>
-                                                        </div>
-                                                    </form>
-                                                </div>
+                                                        <label for="delRole">Право доступа</label>
+                                                        <select class="form-select w-100" size="2" id="delRole"
+                                                                name="checkBoxRoles">
+                                                            <option value="ROLE_ADMIN">Админ</option>
+                                                            <option value="ROLE_USER">Пользователь</option>
+                                                        </select>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                    data-dismiss="modal">Close
-                                            </button>
-                                            <button type="submit" th:form="${'deleteForm' + user.id}"
-                                                    class="btn btn-danger">Удалить
-                                            </button>
-                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" id="closeDeleteModal"
+                                                class="btn btn-secondary"
+                                                data-dismiss="modal">Close
+                                        </button>
+                                        <button type="submit" id="deleteButton"
+                                                class="btn btn-danger">Удалить
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                        </tr>
+                        </div>
+                        </tr-->
                         </tbody>
                     </table>
                 </div>
@@ -221,13 +202,14 @@
                                 <input type="password" class="form-control" id="password" name="password"
                                        placeholder="Пароль">
 
-                                <label for="role">Право доступа</label>
-                                <select class="form-select w-100" size="2" id="role" name="checkBoxRoles">
+                                <label for="createRole">Право доступа</label>
+                                <select multiple id="createRole" class="form-select w-100" size="2"
+                                        name="checkBoxRoles">
                                     <option value="ROLE_ADMIN">Админ</option>
                                     <option value="ROLE_USER">Пользователь</option>
                                 </select>
 
-                                <button type="submit" class="btn btn-success">Создать</button>
+                                <button id="createUser" type="submit" class="btn btn-success">Создать</button>
                             </div>
                         </form>
                     </div>
@@ -246,5 +228,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+<script src="\static\js\users.js"></script>
 </body>
 </html>
